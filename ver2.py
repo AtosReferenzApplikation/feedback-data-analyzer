@@ -6,8 +6,7 @@ from pyspark.ml.feature import StopWordsRemover
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import LDA
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+
 
 data=spark.read.text(r"C:\Users\A704081\Desktop\Daten")
 
@@ -39,11 +38,13 @@ lemmatizer = Lemmatizer() \
 lem=lemmatizer.fit(data4)
 data5=lem.transform(data4)
 
+# Stemmen:
 stemmer = Stemmer() \
 	.setInputCols(["lemma"]) \
 	.setOutputCol("stem")	
 data6=stemmer.transform(data5)
 
+# Nochmal Normalizen, um leere Token zu entfernen:
 normalizer = Normalizer() \
 	.setInputCols(["stem"]) \
 	.setOutputCol("norm")
@@ -92,36 +93,11 @@ topics.show(truncate=False)
 data13 = LDAmodel.transform(data12)
 
 # Topics mit Wörtern anzeigen lassen:
+
 indices=topics.select("termIndices").take(topics.count())
 for x in range(len(indices)):
 	for i in indices[x][0]:
 		print(i, "\t" ,":" ,"\t" ,vocablist[i])
 	print("\n")
 	
-data14 = data13.select("filtered2","IDFFeatures","topicDistribution")
-
-text=data13.select("filtered2").take(data13.count())
-helpdict=[]
-freqdict={}
-for x in range(data13.count()):
-	for y in text[x][0]:
-		helpdict.append(y)
-		
-for i in vocablist:
-	freqdict[i]=0
-	
-for i in helpdict:
-	if i in freqdict:
-		freqdict[i]+=1
-
-wordcloud = WordCloud(width = 3000,height = 2000,background_color = 'black').fit_words(freqdict)
-	
-fig = plt.figure(
-    figsize = (40, 30),\
-    facecolor = 'k',\
-    edgecolor = 'k')
-	
-plt.imshow(wordcloud, interpolation = 'bilinear')
-plt.axis('off')
-plt.tight_layout(pad=0)
-plt.show()
+data14= data13.select("filtered2","IDFFeatures","topicDistribution")
