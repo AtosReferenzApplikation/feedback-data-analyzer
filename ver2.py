@@ -100,4 +100,6 @@ for x in range(len(indices)):
 		print(i, "\t" ,":" ,"\t" ,vocablist[i])
 	print("\n")
 	
+
 data14= data13.select("filtered2","IDFFeatures","topicDistribution")
+
