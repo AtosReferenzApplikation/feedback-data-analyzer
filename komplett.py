@@ -5,7 +5,7 @@ from pyspark.ml.feature import StopWordsRemover
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import SnowballStemmer
 
-df = spark.read.text(r"C:\Users\A704194\projects\Spark_PP1\Testdaten")
+df = spark.read.text(r"C:\Users\A704194\projects\Spark_PP1\Testdaten\KleineTR")
 tokenizer = Tokenizer(inputCol="value", outputCol="words")
 tok = tokenizer.transform(df)
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
@@ -63,3 +63,19 @@ remover2 = StopWordsRemover(inputCol="value", outputCol="filtered")
 rem2 = remover2.transform(fertig)
 
 fertig = rem2.selectExpr("filtered as value")
+
+
+from pyspark.ml.feature import CountVectorizer
+cv = CountVectorizer(inputCol="value", outputCol="tf")
+model = cv.fit(fertig)
+
+dic = model.vocabulary
+
+tf = model.transform(fertig)
+## result = DF mit value (array mit Wörtern) und features (TF)
+## dic ist liste mit Wörtern, Dimemnsion 5 ist dic[5]
+from pyspark.ml.feature import HashingTF, IDF, Tokenizer
+
+idf = IDF(inputCol="tf", outputCol="idf")
+idfModel = idf.fit(tf)
+tfidf = idfModel.transform(tf)
