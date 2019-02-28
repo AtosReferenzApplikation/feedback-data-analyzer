@@ -1,19 +1,14 @@
-from pyspark.ml.feature import Tokenizer, RegexTokenizer
-from pyspark.sql.functions import col, udf
-from nltk.tokenize import word_tokenize
+from pyspark.ml.feature import RegexTokenizer
 from pyspark.ml.feature import StopWordsRemover
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import SnowballStemmer
 
 df = spark.read.text(r"C:\Users\A704194\projects\Spark_PP1\Testdaten\KleineTR")
-tokenizer = Tokenizer(inputCol="value", outputCol="words")
-tok = tokenizer.transform(df)
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 regtok = regexTokenizer.transform(df)
-remover = StopWordsRemover(inputCol="words", outputCol="filtered")
-rem = remover.transform(regtok)
-remrow = remover.transform(regtok).take(regtok.count())
-fil = rem.select("filtered")
+remover1 = StopWordsRemover(inputCol="words", outputCol="filtered")
+rem1 = remover1.transform(regtok)
+fil = rem1.select("filtered")
 filrow = fil.take(fil.count())
 
 lemmatizer = WordNetLemmatizer()
@@ -57,23 +52,26 @@ for i in stemsno:
 	hilf = []
 
 fertig = spark.createDataFrame(brauch, ["value"])
-fertig
 
-remover2 = StopWordsRemover(inputCol="value", outputCol="filtered")
+remover2 = StopWordsRemover(inputCol="value", outputCol="rem")
 rem2 = remover2.transform(fertig)
 
-fertig = rem2.selectExpr("filtered as value")
+additionalstopwords = ["doesn", "didn", "isn", "wasn", "shouldn", "tho", "even", "well", "great", "br"]
+remover3 = StopWordsRemover(inputCol="rem", outputCol="addsw", stopWords = additionalstopwords)
+rem3 = remover3.transform(rem2)
 
+fertig = rem3.selectExpr("addsw as value")
 
 from pyspark.ml.feature import CountVectorizer
-cv = CountVectorizer(inputCol="value", outputCol="tf")
+cv = CountVectorizer(inputCol="value", outputCol="tf", vocabSize = 50, minDF = 2)
 model = cv.fit(fertig)
 
-dic = model.vocabulary
+dict = model.vocabulary
 
 tf = model.transform(fertig)
 ## result = DF mit value (array mit Wörtern) und features (TF)
 ## dic ist liste mit Wörtern, Dimemnsion 5 ist dic[5]
+
 from pyspark.ml.feature import HashingTF, IDF, Tokenizer
 
 idf = IDF(inputCol="tf", outputCol="idf")
