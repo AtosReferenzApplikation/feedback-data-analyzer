@@ -1,8 +1,12 @@
 ## k-means
 from pyspark.ml.clustering import KMeans
 
-kmeans = KMeans().setK(2).setSeed(1)
+rescaledData = tfidf.selectExpr("idf as features")
+
+kmeans = KMeans().setK(11).setSeed(1)
 model = kmeans.fit(rescaledData)
+
+predictions = model.transform(rescaledData)
 
 wssse = model.computeCost(rescaledData)
 "Within Set Sum of Squared Errors = " + str(wssse)
