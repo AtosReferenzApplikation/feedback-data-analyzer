@@ -1,26 +1,37 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import numpy
 ## Überarbeiten, da so nicht lösbar. Muss gruppiert werden
 top=topics.select("topic").take(topics.count())
-x=[top[i][0] for i in range(len(top))]
+#x=[top[i][0] for i in range(len(top))]
 
 distri=data14.select("topicDistribution").take(data14.count())
 y0=[distri[0][0][i] for i in range(len(distri[0][0]))]
-y1=[distri[0][0][i] for i in range(len(distri[1][0]))]
-y2=[distri[0][0][i] for i in range(len(distri[2][0]))]
-y3=[distri[0][0][i] for i in range(len(distri[3][0]))]
-y4=[distri[0][0][i] for i in range(len(distri[4][0]))]
+y1=[distri[1][0][i] for i in range(len(distri[1][0]))]
+y2=[distri[2][0][i] for i in range(len(distri[2][0]))]
+y3=[distri[3][0][i] for i in range(len(distri[3][0]))]
+y4=[distri[4][0][i] for i in range(len(distri[4][0]))]
 
-w=0,2
-ax=plt.subplot(111)
-ax.bar(x,y0,label="Topic0",color='k')
-ax.bar(x,y1,label="Topic1",color='r')
-ax.bar(x,y2,label='Topic2',color='b')
-ax.bar(x,y3,label='Topic3',color='g')
-ax.bar(x,y4,label='Topic4',color='y')
+x=numpy.arange(len(y0))
 
+w = 0.15
+plt.bar(x, y0, width=w, color='red', zorder=2)
+plt.bar(x+ w, y1, width=w, color='blue', zorder=2)
+plt.bar(x+ w*2, y2, width=w, color='orange', zorder=2)
+plt.bar(x+ w*3, y3, width=w, color='green', zorder=2)
+plt.bar(x+ w*4, y4, width=w, color='yellow', zorder=2)
 
-plt.xlabel('topic')
-plt.ylabel('distribution')
+plt.xticks(x+w*2,['Topic0','Topic1','Topic2','Topic3','Topic4'])
 plt.title('Topic Distribution')
-plt.legend()
+plt.xlabel('Topics')
+plt.ylabel('Distribution')
+
+red=mpatches.Patch(color='red',label='Document0')
+blue=mpatches.Patch(color='blue',label='Document1')
+orange=mpatches.Patch(color='orange',label='Document2')
+green=mpatches.Patch(color='green',label='Document3')
+yellow=mpatches.Patch(color='yellow',label='Document4')
+
+plt.legend(handles=[red,blue,orange,green,yellow])
+plt.grid(axis='y')
 plt.show()
