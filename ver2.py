@@ -1,3 +1,4 @@
+#from pyspark import SparkContext, SparkConf
 from sparknlp.base import *
 from sparknlp.annotator import *
 from sparknlp.common import *
@@ -7,8 +8,7 @@ from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import LDA
 
-
-data=spark.read.text(r"C:\Users\A704081\Desktop\Daten")
+data=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\train\neg")
 
 # Text in SparkNLP einlesen:
 documentAssembler = DocumentAssembler() \
@@ -63,12 +63,12 @@ remover = StopWordsRemover(inputCol="finished_norm", outputCol="filtered")
 data9=remover.transform(data8)
 
 # Custom StopWords entfernen:
-stoplist=["br", "movi", "film", "thi", "hi"]
+stoplist=["br", "movi", "film", "thi", "hi", "thei", "episod", "seri", "much", "sai"]
 remov=StopWordsRemover(inputCol="filtered", outputCol="filtered2", stopWords=stoplist)
 data10=remov.transform(data9)
 
 # Feature Vectoren erstellen:
-cv = CountVectorizer(inputCol="filtered2", outputCol="features", vocabSize=50, minDF=2)
+cv = CountVectorizer(inputCol="filtered2", outputCol="features", vocabSize=800, minDF=10)
 model = cv.fit(data10)
 vocablist=model.vocabulary
 data11 = model.transform(data10)
@@ -80,13 +80,17 @@ data12 = idfModel.transform(data11)
 
 # LDA Clustering:
 # k=Anzahl der Themen, maxIter=Anzahl der Wörter im Topic
-lda = LDA(k=5, maxIter=5)
+
+lda = LDA(k=80, maxIter=10)
 LDAmodel = lda.fit(data12)
+
 ll = LDAmodel.logLikelihood(data12)
 lp = LDAmodel.logPerplexity(data12)
 print("The lower bound on the log likelihood of the entire corpus: " + str(ll))
 print("The upper bound on perplexity: " + str(lp))
+
 # die Zahl hinter describeTopics ist die Anzahl der Wörter die angezeigt werden soll, maximal maxIter von oben
+
 topics = LDAmodel.describeTopics(5)
 print("The topics described by their top-weighted terms:")
 topics.show(truncate=False)
@@ -95,11 +99,14 @@ data13 = LDAmodel.transform(data12)
 # Topics mit Wörtern anzeigen lassen:
 
 indices=topics.select("termIndices").take(topics.count())
+# Für wenige Topics:
 for x in range(len(indices)):
 	for i in indices[x][0]:
 		print(i, "\t" ,":" ,"\t" ,vocablist[i])
 	print("\n")
-	
+
+# Für viele Topics, topiclist lässt sich durch-iterieren
+topiclist=[[vocablist[i] for i in indices[x][0]] for x in range(len(indices))]
 
 data14= data13.select("filtered2","IDFFeatures","topicDistribution")
 
