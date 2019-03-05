@@ -3,7 +3,7 @@ from pyspark.ml.feature import StopWordsRemover
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import SnowballStemmer
 
-df = spark.read.text(r"C:\Users\A704194\projects\Spark_PP1\Testdaten\KleineTR")
+df = spark.read.text(r"C:\Users\A704194\projects\Spark_PP1\Testdaten\GrosseTR")
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 regtok = regexTokenizer.transform(df)
 remover1 = StopWordsRemover(inputCol="words", outputCol="filtered")
@@ -63,7 +63,7 @@ rem3 = remover3.transform(rem2)
 fertig = rem3.selectExpr("addsw as value")
 
 from pyspark.ml.feature import CountVectorizer
-cv = CountVectorizer(inputCol="value", outputCol="tf", vocabSize = 50, minDF = 2)
+cv = CountVectorizer(inputCol="value", outputCol="tf", vocabSize = 300, minDF = 10)
 model = cv.fit(fertig)
 
 dict = model.vocabulary
