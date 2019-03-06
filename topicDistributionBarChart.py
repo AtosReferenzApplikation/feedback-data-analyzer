@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
 from ver2 import topics, data14
-## Überarbeiten, da so nicht lösbar. Muss gruppiert werden
+
 top=topics.select("topic").take(topics.count())
 #x=[top[i][0] for i in range(len(top))]
 
