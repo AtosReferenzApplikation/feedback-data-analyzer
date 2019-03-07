@@ -13,5 +13,5 @@ z.plot(kind = 'bar', ax = axes[1])
 # make aspect equal (such that circle is not eliptic)
 axes[0].set_aspect("equal")
 #place the legend at a decent position
-axes[0].legend(loc=1, bbox_to_anchor= (1,0.2), fontsize=11)
+axes[0].legend(loc=1, bbox_to_anchor= (0,1.1), fontsize=8)
 plt.show()
