@@ -12,7 +12,7 @@ rem3 = remover3.transform(rem2)
 fertig = rem3.selectExpr("addsw as value")
 
 #Vektor aus Dokumenten, tfidf-df erstellen
-cv = CountVectorizer(inputCol="value", outputCol="tf", vocabSize = 500, minDF = 200)
+cv = CountVectorizer(inputCol="value", outputCol="tf", vocabSize = 300, minDF = 800)
 model = cv.fit(fertig)
 dict = model.vocabulary
 tf = model.transform(fertig)
@@ -23,7 +23,7 @@ tfidf = idfModel.transform(tf)
 rescaledData = tfidf.selectExpr("idf as features")
 
 #predictions erstellen
-kmeans = KMeans(featuresCol="features", predictionCol="prediction", k=50, initSteps=50)
+kmeans = KMeans(featuresCol="features", predictionCol="prediction", k=67, initSteps=70)
 model = kmeans.fit(rescaledData)
 predictions = model.transform(rescaledData)
 
