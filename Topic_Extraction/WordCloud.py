@@ -22,7 +22,7 @@ for i in range(len(dict)):
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-wordcloud = WordCloud(width = 3000,height = 2000,background_color = 'black').fit_words(dicwords)
+wordcloud = WordCloud(width = 2000,height = 1500,background_color = 'black').fit_words(dicwords)
 	
 fig = plt.figure(
     figsize = (40, 30),\
