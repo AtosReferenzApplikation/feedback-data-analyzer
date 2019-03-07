@@ -1,7 +1,7 @@
 # Code für WordCloud aus TF aus allen Dokumenten
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-from ver2 import data13, vocablist
+from TopicExtraction import data13, vocablist
 # Data:
 
 text=data13.select("filtered2").take(data13.count())

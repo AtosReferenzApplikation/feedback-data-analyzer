@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
-from ver2 import topics, data14
+from TopicExtraction import topics, data14
 
 top=topics.select("topic").take(topics.count())
 #x=[top[i][0] for i in range(len(top))]

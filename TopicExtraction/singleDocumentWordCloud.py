@@ -1,7 +1,7 @@
 # Code für WordCloud aus Features und IDF für 1 Dokument
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-from ver2 import data13, vocablist
+from TopicExtraction import data13, vocablist
 
 # Data for WordCloud:
 # This is a WordCloud for Document 0, change i for other Documents in dict comprehension below:

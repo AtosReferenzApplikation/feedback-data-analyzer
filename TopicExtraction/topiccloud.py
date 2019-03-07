@@ -1,7 +1,7 @@
 # Code für WordCloud aus Topic Wörtern und TopicWeight für 1 Topic
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-from ver2 import topics, vocablist
+from TopicExtraction import topics, vocablist
 
 term=topics.select("termIndices").take(topics.count())
 weight=topics.select("termWeights").take(topics.count())
