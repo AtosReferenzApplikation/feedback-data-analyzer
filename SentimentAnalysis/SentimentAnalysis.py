@@ -1,21 +1,9 @@
-import pyspark.sql.functions as f
-import re
 from sparknlp.base import *
 from sparknlp.annotator import *
 from sparknlp.common import *
 from pyspark.ml import Pipeline
 from pyspark.ml.feature import StopWordsRemover
 
-# Deutsche Sentiment Liste:
-sentiment=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\SentiWS_v1.8c_Negative.txt",format="csv",sep="\t")
-c0=sentiment.select("_c0").take(sentiment.count())
-WortWortartList=[re.split("[|]",c0[x][0]) for x in range(len(c0))]
-sentiment2=spark.createDataFrame(WortWortartList)
-Score=sentiment.select("_c1")
-score=Score.take(Score.count())
-WortScoreDict={WortWortartList[x][0]:score[x][0] for x in range(Score.count())}
-
-#tweets=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\corpus_v1.0.tsv",format="csv",sep="\t")
 # Englische Sentiment Liste:
 neg=spark.read.text(r"C:\Users\A704081\Downloads\opinion-lexicon-English\negative-words.txt")
 pos=spark.read.text(r"C:\Users\A704081\Downloads\opinion-lexicon-English\positive-words.txt")
@@ -27,6 +15,7 @@ poslist=[Pos[x][0] for x in range(len(Pos))]
 # Daten als DataFrame einlesen:
 #data=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\train\neg")
 data=spark.read.text(r"C:\Users\A704081\Desktop\Daten")
+
 # Text in SparkNLP einlesen:
 documentAssembler = DocumentAssembler() \
 	.setInputCol("value") \
