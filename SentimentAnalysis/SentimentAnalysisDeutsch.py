@@ -6,7 +6,6 @@ from pyspark.ml import Pipeline
 from pyspark.ml.feature import StopWordsRemover
 
 # Deutsche Sentiment Listen:
-# Die Wortvarianten rechts werden vernachlässigt.
 sentiment=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\SentiWS_v1.8c_Negative.txt",format="csv",sep="\t")
 c0=sentiment.select("_c0").take(sentiment.count())
 WortWortartList=[re.split("[|]",c0[x][0]) for x in range(len(c0))]
@@ -15,6 +14,11 @@ Score=sentiment.select("_c1")
 score=Score.take(Score.count())
 WortScoreDict={WortWortartList[x][0]:float(score[x][0]) for x in range(Score.count())}
 
+zusatz=sentiment.select("_c2").take(sentiment.count())
+zusatzSplit=[re.split("," ,zusatz[x][0]) if zusatz[x][0]!=None else "Leer" for x in range(len(zusatz))]
+zusatzList=[[i for i in zusatzSplit[x]] if zusatzSplit[x]!= "Leer" else "Leer" for x in range(len(zusatz))]
+WortDict={wort:float(score[x][0]) for x in range(Score.count()) for wort in zusatzList[x]}
+
 possenti=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\SentiWS_v1.8c_Positive.txt",format="csv",sep="\t")
 posc0=sentiment.select("_c0").take(sentiment.count())
 posWortWortartList=[re.split("[|]",posc0[x][0]) for x in range(len(posc0))]
@@ -22,6 +26,11 @@ possentiment2=spark.createDataFrame(posWortWortartList)
 posScore=possenti.select("_c1")
 posscore=posScore.take(posScore.count())
 posWortScoreDict={posWortWortartList[x][0]:float(posscore[x][0]) for x in range(posScore.count())}
+
+poszusatz=possenti.select("_c2").take(possenti.count())
+poszusatzSplit=[re.split("," ,poszusatz[x][0]) if poszusatz[x][0]!=None else "Leer" for x in range(len(poszusatz))]
+poszusatzList=[[i for i in poszusatzSplit[x]] if poszusatzSplit[x]!= "Leer" else "Leer" for x in range(len(poszusatz))]
+posWortDict={wort:float(posscore[x][0]) for x in range(posScore.count()) for wort in poszusatzList[x]}
 
 # Daten Einlesen:
 #tweets=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\corpus_v1.0.tsv",format="csv",sep="\t")
@@ -78,18 +87,27 @@ docList=[[docs[y][0][x] for x in range(len(docs[y][0]))] for y in range(len(docs
 CounterList=[0 for x in range(data7.count())]
 
 for x in range(data7.count()):
-    for y in docList[x]:
-        if y in posWortScoreDict:
-            CounterList[x]+=posWortScoreDict[y]
-        if y in WortScoreDict:
-            CounterList[x]+=WortScoreDict[y]
+	for y in docList[x]:
+		if y in posWortScoreDict:
+			CounterList[x]+=posWortScoreDict[y]
+		if y in WortScoreDict:
+			CounterList[x]+=WortScoreDict[y]
+		if y in posWortDict:
+			CounterList[x]+=posWortDict[y]
+		if y in WortDict:
+			CounterList[x]+=WortDict[y]
 
 
 CounterList2=[[0,0] for x in range(data7.count())]
 
 for x in range(data7.count()):
-    for y in docList[x]:
-        if y in posWortScoreDict:
-            CounterList2[x][0]+=posWortScoreDict[y]
-        if y in WortScoreDict:
-            CounterList2[x][1]+=WortScoreDict[y]
+	for y in docList[x]:
+		if y in posWortScoreDict:
+			CounterList2[x][0]+=posWortScoreDict[y]
+		if y in WortScoreDict:
+			CounterList2[x][1]+=WortScoreDict[y]
+		if y in posWortDict:
+			CounterList2[x][0]+=posWortDict[y]
+		if y in WortDict:
+			CounterList2[x][1]+=WortDict[y]
+
