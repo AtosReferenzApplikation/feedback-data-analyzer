@@ -14,6 +14,7 @@ Score=sentiment.select("_c1")
 score=Score.take(Score.count())
 WortScoreDict={WortWortartList[x][0]:float(score[x][0]) for x in range(Score.count())}
 
+# zusatzSplit und zusatzList sind die selbe Liste, ich lösche aber keine, um Folgefehler zu vermeiden
 zusatz=sentiment.select("_c2").take(sentiment.count())
 zusatzSplit=[re.split("," ,zusatz[x][0]) if zusatz[x][0]!=None else "Leer" for x in range(len(zusatz))]
 zusatzList=[[i for i in zusatzSplit[x]] if zusatzSplit[x]!= "Leer" else "Leer" for x in range(len(zusatz))]
@@ -27,6 +28,7 @@ posScore=possenti.select("_c1")
 posscore=posScore.take(posScore.count())
 posWortScoreDict={posWortWortartList[x][0]:float(posscore[x][0]) for x in range(posScore.count())}
 
+# poszusatzSplit und poszusatzList sind die selbe Liste, ich lösche aber keine, um Folgefehler zu vermeiden
 poszusatz=possenti.select("_c2").take(possenti.count())
 poszusatzSplit=[re.split("," ,poszusatz[x][0]) if poszusatz[x][0]!=None else "Leer" for x in range(len(poszusatz))]
 poszusatzList=[[i for i in poszusatzSplit[x]] if poszusatzSplit[x]!= "Leer" else "Leer" for x in range(len(poszusatz))]
