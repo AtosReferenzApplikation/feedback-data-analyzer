@@ -7,6 +7,9 @@ from pyspark.ml.feature import StopWordsRemover
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import LDA
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("TopicExtraction").getOrCreate()
 
 data=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\train\neg")
 
