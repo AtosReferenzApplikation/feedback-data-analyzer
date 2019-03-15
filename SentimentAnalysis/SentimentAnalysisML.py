@@ -1,3 +1,6 @@
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local").appName("SentimentAnalysis").getOrCreate()
+
 from pyspark.sql.functions import lit
 from sparknlp.base import *
 from sparknlp.annotator import *
@@ -7,10 +10,7 @@ from pyspark.ml.feature import StopWordsRemover
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import LDA
-from pyspark.sql import SparkSession
 from pyspark.ml.classification import LogisticRegression
-
-spark = SparkSession.builder.appName("SentimentAnalysis").getOrCreate()
 
 # Txt Dateien einlesen
 #negdf=spark.read.text(r"C:\Users\A704081\Desktop\Daten")
@@ -44,8 +44,7 @@ data2=documentAssembler.transform(data)
 # Text in SparkNLP's Token umwandeln:
 tokenizer = Tokenizer() \
 	.setInputCols(["document"]) \
-	.setOutputCol("token") \
-	.addInfixPattern("(\p{L}+)(n't\b)")
+	.setOutputCol("token").addInfixPattern("(\p{L}+)(n't\b)")
 data3=tokenizer.transform(data2)
 
 # Satzzeichen entfernen:
@@ -94,6 +93,9 @@ data10=lrmodel.transform(data9)
 # Testdaten
 testadf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\neg")
 testbdf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\pos")
+#testadf=spark.read.text(r"C:\Users\A704081\Desktop\TestA")
+#testbdf=spark.read.text(r"C:\Users\A704081\Desktop\TestB")
+
 testadf=testadf.withColumn("label", lit(0))
 testbdf=testbdf.withColumn("label", lit(1))
 testneg=testadf.take(testadf.count())
@@ -144,5 +146,9 @@ df9 = idfModel.transform(df8)
 lr=LogisticRegression(maxIter=100)
 df10=lrmodel.transform(df9)
 
+df10.select("value","label","prediction").show()
+accuracy = 0
 accuracy = df10.filter(df10.label == df10.prediction).count() / float(df10.count())
-accuracy
+print("\n",accuracy,"\n")
+
+spark.stop()

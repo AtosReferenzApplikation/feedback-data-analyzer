@@ -1,3 +1,6 @@
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local").appName("SentimentAnalysis").config("spark.jars.packages", "JohnSnowLabs:spark-nlp:1.7.3").getOrCreate()
+
 from sparknlp.base import *
 from sparknlp.annotator import *
 from sparknlp.common import *

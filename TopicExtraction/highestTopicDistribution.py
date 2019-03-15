@@ -1,6 +1,7 @@
 # Code zum Darstellen der Topic mit der höchsten übereinstimmung für ein Dokument 
 from operator import itemgetter
 from collections import OrderedDict
+from TopicExtraction import data14, topiclist
 
 distribution=data14.select("topicDistribution").take(data14.count())
 
