@@ -87,11 +87,14 @@ model = kmeans.fit(rescaledData)
 predictions = model.transform(rescaledData)
 centers = model.clusterCenters()
 
-# Wie ähnlich Objekt dem eigentlichen Cluster ist, verglichen mit anderen
-# Gemessen an euklidischer oder Manhatten-Distanz (metrische)
-# Range: −1 to +1 (high = well matched, low = poorly matched) -> Many points low/negative value, too many or too few clusters
+#Wie ähnlich Objekt dem eigentlichen Cluster ist, verglichen mit anderen
+#Gemessen an euklidischer oder Manhatten-Distanz (metrische)
+#Range: −1 to +1 (high = well matched, low = poorly matched) -> Many points low/negative value, too many or too few clusters
 evaluator = ClusteringEvaluator()
 silhouette = evaluator.evaluate(predictions)
+
+#Within set sum of squared errors
+wssse = model.computeCost(rescaledData)
 
 #dict mit Cluster-Größe erstellen
 dictpred = {}
@@ -105,7 +108,7 @@ for i in x:
         dictpred[j] += 1
 
 
-# Erstellen von Diagrammen zur Verteilung der Dokumente in Cluster, braucht Dict
+#Erstellen von Diagrammen zur Verteilung der Dokumente in Cluster, braucht Dict
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -118,7 +121,7 @@ fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(20,9))
 #specify which column of the dataframe to plot (here 0)
 z.plot(y=0, kind = 'pie', ax = axes[0])
 z.plot(kind = 'bar', ax = axes[1])
-# make aspect equal (such that circle is not eliptic)
+#make aspect equal (such that circle is not eliptic)
 axes[0].set_aspect("equal")
 #place the legend at a decent position
 axes[0].legend(loc=1, bbox_to_anchor= (0,1.1), fontsize=8)
