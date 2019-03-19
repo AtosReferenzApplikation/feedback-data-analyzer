@@ -85,6 +85,13 @@ rescaledData = tfidf.selectExpr("idf as features")
 kmeans = KMeans(featuresCol="features", predictionCol="prediction", k=67, initSteps=70)
 model = kmeans.fit(rescaledData)
 predictions = model.transform(rescaledData)
+centers = model.clusterCenters()
+
+# Wie ähnlich Objekt dem eigentlichen Cluster ist, verglichen mit anderen
+# Gemessen an euklidischer oder Manhatten-Distanz (metrische)
+# Range: −1 to +1 (high = well matched, low = poorly matched) -> Many points low/negative value, too many or too few clusters
+evaluator = ClusteringEvaluator()
+silhouette = evaluator.evaluate(predictions)
 
 #dict mit Cluster-Größe erstellen
 dictpred = {}
