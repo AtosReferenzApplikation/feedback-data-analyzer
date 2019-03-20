@@ -1,1 +1,1 @@
-{"class":"com.johnsnowlabs.nlp.annotators.NormalizerModel","timestamp":1553074980227,"sparkVersion":"2.3.2","uid":"NORMALIZER_c0f4d966b79e","paramMap":{"lowercase":true,"inputCols":["token"],"patterns":["[^\\pL+]"],"outputCol":"normalized"}}
+{"class":"com.johnsnowlabs.nlp.annotators.NormalizerModel","timestamp":1553076330400,"sparkVersion":"2.3.2","uid":"NORMALIZER_d8d76a573583","paramMap":{"patterns":["[^\\pL+]"],"outputCol":"normalized","lowercase":true,"inputCols":["token"]}}

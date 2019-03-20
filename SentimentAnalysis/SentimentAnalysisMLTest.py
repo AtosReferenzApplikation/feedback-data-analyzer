@@ -13,7 +13,7 @@ from pyspark.ml.clustering import LDA
 from pyspark.ml.classification import LogisticRegression
 norm=Normalizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Norm")
 lem=Lemmatizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Lemmatizer")
-model=CountVectorizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
+model = CountVectorizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
 idfModel=IDF.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
 lrmodel=LogisticRegression.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
 

@@ -52,7 +52,7 @@ normalizer = Normalizer() \
 	.setInputCols(["token"]) \
 	.setOutputCol("normalized")
 norm=normalizer.fit(data3)
-norm.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Norm")
+
 data4=norm.transform(data3)
 
 # Lemmatizen:
@@ -61,7 +61,6 @@ lemmatizer = Lemmatizer() \
 	.setOutputCol("lemma") \
 	.setDictionary(r"C:\Users\A704081\Downloads\lemmatization-lists-master\lemmatization-en.txt", key_delimiter="\t", value_delimiter="\n")
 lem=lemmatizer.fit(data4)
-lem.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Lemmatizer")
 data5=lem.transform(data4)
 
 # Ich verwende keinen Stemmer, da die Sentiment Listen keine gestemmten Wörter enthalten
@@ -79,20 +78,23 @@ data7=remover.transform(data6)
 # Feature Vectoren erstellen:
 cv = CountVectorizer(inputCol="filtered", outputCol="features")
 model = cv.fit(data7)
-model.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
 vocablist=model.vocabulary
 data8 = model.transform(data7)
 
 # IDF auf Term-Frequency-Vectoren:
 idf = IDF(inputCol="features", outputCol="IDFFeatures")
 idfModel = idf.fit(data8)
-idfModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
 data9 = idfModel.transform(data8)
 
 # Logistic Regression
 lr=LogisticRegression()
 lrmodel=lr.fit(data9)
-lrmodel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
 data10=lrmodel.transform(data9)
+data10.show()
 
+norm.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Norm")
+lem.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Lemmatizer")
+model.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
+idfModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
+lrmodel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
 spark.stop()

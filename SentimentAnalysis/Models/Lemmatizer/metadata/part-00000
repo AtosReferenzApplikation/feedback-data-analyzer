@@ -1,1 +1,1 @@
-{"class":"com.johnsnowlabs.nlp.annotators.LemmatizerModel","timestamp":1553074989091,"sparkVersion":"2.3.2","uid":"LEMMATIZER_b1c139b6bf58","paramMap":{"outputCol":"lemma","inputCols":["normalized"]}}
+{"class":"com.johnsnowlabs.nlp.annotators.LemmatizerModel","timestamp":1553076339462,"sparkVersion":"2.3.2","uid":"LEMMATIZER_5eaf5d9f9112","paramMap":{"inputCols":["normalized"],"outputCol":"lemma"}}
