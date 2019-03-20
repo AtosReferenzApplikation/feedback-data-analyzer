@@ -1,6 +1,9 @@
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.master("local").appName("SentimentAnalysis").getOrCreate()
 
+import sys
+sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
+
 from pyspark.sql.functions import lit
 from sparknlp.base import *
 from sparknlp.annotator import *

@@ -1,6 +1,9 @@
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.master("local").appName("SentimentAnalysis").getOrCreate()
 
+import sys
+sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
+
 from pyspark.sql.functions import lit
 from sparknlp.base import *
 from sparknlp.annotator import *
@@ -18,10 +21,10 @@ idfModel=IDF.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAn
 lrmodel=LogisticRegression.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
 
 # Testdaten
-#testadf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\neg")
-#testbdf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\pos")
-testadf=spark.read.text(r"C:\Users\A704081\Desktop\TestA")
-testbdf=spark.read.text(r"C:\Users\A704081\Desktop\TestB")
+testadf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\neg")
+testbdf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\pos")
+#testadf=spark.read.text(r"C:\Users\A704081\Desktop\TestA")
+#testbdf=spark.read.text(r"C:\Users\A704081\Desktop\TestB")
 
 testadf=testadf.withColumn("label", lit(0))
 testbdf=testbdf.withColumn("label", lit(1))
