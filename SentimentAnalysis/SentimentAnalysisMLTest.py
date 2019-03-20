@@ -14,11 +14,11 @@ from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import LDA
 from pyspark.ml.classification import LogisticRegression
-norm=Normalizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Norm")
-lem=Lemmatizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Lemmatizer")
-model = CountVectorizer.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
-idfModel=IDF.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
-lrmodel=LogisticRegression.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
+norm=NormalizerModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Norm")
+lem=LemmatizerModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\Lemmatizer")
+model = CountVectorizerModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
+idfModel=IDFModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
+lrmodel=LogisticRegressionModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
 
 # Testdaten
 testadf=spark.read.text(r"C:\Users\A704081\Downloads\Projekt\aclImdb_v1\aclImdb\test\neg")
