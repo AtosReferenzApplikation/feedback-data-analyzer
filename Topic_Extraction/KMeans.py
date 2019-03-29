@@ -19,46 +19,21 @@ fil = rem1.select("filtered")
 filrow = fil.take(fil.count())
 
 lemmatizer = WordNetLemmatizer()
-lemv = []
-lem = []
 words = []
-sno = SnowballStemmer("english")
-stemsno = []
-
+stemmer = SnowballStemmer("english")
 all = []
+
 for k in filrow:
 	for m in k:
 		for n in m:	
+			n = lemmatizer.lemmatize(n, "v")
+			n = lemmatizer.lemmatize(n)
+			n = stemmer.stem(n)
 			words.append(n)
 		all.append(words)
 		words = []
 
-for p in all:
-	for q in p:
-		words.append(lemmatizer.lemmatize(q, "v"))
-	lemv.append(words)
-	words = []
-
-for p in lemv:
-	for q in p:
-		words.append(lemmatizer.lemmatize(q))
-	lem.append(words)
-	words = []
-
-for w in lem:
-	for x in w:
-		words.append(sno.stem(x))
-	stemsno.append(words)
-	words = []
-
-brauch = []
-hilf = []
-for i in stemsno:
-	hilf.append(i)
-	brauch.append(hilf)
-	hilf = []
-
-fertig = spark.createDataFrame(brauch, ["value"])
+fertig = spark.createDataFrame(all, ["value"])
 
 remover2 = StopWordsRemover(inputCol="value", outputCol="rem")
 rem2 = remover2.transform(fertig)
