@@ -42,12 +42,15 @@ fertig = spark.createDataFrame(all, ["filtered", "label"])
 rem2 = remover2.transform(fertig).select("rem", "label")
 fertig = remover3.transform(rem2).select("filtered", "label")
 
-model = cv.fit(fertig)
+cvmodel = cv.fit(fertig)
 dict = model.vocabulary
 tf = model.transform(fertig)
-idfModel = idf.fit(tf)
-tfidf = idfModel.transform(tf).select("features", "label")
+idfmodel = idf.fit(tf)
+tfidflab = idfmodel.transform(tf).select("features", "label")
+
+lrmodel = lr.fit(tfidflab)
 
 # Logistic Regression mit Pipeline
-model = pipeline.fit(tfidf)
-model.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\pl")
+cvmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\cv")
+idfmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\idf")
+lrmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\lr")
