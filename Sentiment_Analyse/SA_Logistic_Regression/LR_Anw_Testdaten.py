@@ -1,4 +1,4 @@
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\test\neg")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\neg")
 
 regtok = regexTokenizer.transform(df)
 filrow = remover1.transform(regtok).select("filtered").take(regtok.count())

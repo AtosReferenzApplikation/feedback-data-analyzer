@@ -29,8 +29,8 @@ lr = LogisticRegression()
 ####################################### Model erstellen
 
 # Txt Dateien einlesen neg: \0_3.txt pos: \0_9.txt
-negdf = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\train\neg")
-posdf = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\train\pos")
+negdf = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TR_Englisch\neg")
+posdf = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TR_Englisch\pos")
 
 # Label Spalte einfügen
 # 0=negative, 1=positive
