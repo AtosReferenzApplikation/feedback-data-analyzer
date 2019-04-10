@@ -1,4 +1,4 @@
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\pos\0_10.txt")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\pos\24_10.txt")
 
 regtok = regexTokenizer.transform(df)
 filrow = remover1.transform(regtok).select("filtered").take(regtok.count())
@@ -11,8 +11,7 @@ for k in filrow:
 		all.append(n)
 
 dfneu = spark.createDataFrame([(all,)], ["value"])
-rem2 = remover2.transform(dfneu)
-fertig = remover3.transform(rem2).select("filtered")
+fertig = remover2.transform(dfneu).select("filtered")
 
 #Vektor aus Dokumenten, tfidf-df erstellen
 tf = cvmodel.transform(fertig)

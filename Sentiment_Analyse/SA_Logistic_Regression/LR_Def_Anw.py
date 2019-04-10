@@ -8,12 +8,9 @@ from pyspark.ml.classification import LogisticRegression, LogisticRegressionMode
 
 from pyspark.sql import Row
 
-additionalstopwords = ["doesn", "didn", "isn", "wasn", "get", "realli", "re", "shouldn", "tho", "everi", "br"]
-
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 remover1 = StopWordsRemover(inputCol="words", outputCol="filtered")
-remover2 = StopWordsRemover(inputCol="value", outputCol="rem")
-remover3 = StopWordsRemover(inputCol="rem", outputCol="filtered", stopWords = additionalstopwords)
+remover2 = StopWordsRemover(inputCol="value", outputCol="filtered")
 
 lemmatizer = WordNetLemmatizer()
 words = []
