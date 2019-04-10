@@ -1,6 +1,5 @@
-
 from pyspark.sql import SparkSession
-spark = SparkSession.builder.master("local").appName("SentimentAnalysis").getOrCreate()
+spark = SparkSession.builder.master("local").appName("SentimentAnalysisTestdaten").getOrCreate()
 
 import sys
 sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
@@ -16,7 +15,7 @@ from pyspark.ml.feature import IDF, IDFModel
 from pyspark.ml.clustering import LDA, LDAModel
 from pyspark.ml.classification import LogisticRegression, LogisticRegressionModel
 
-NLPpipelineModel = PipelineModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\NLPPipeline")
+NLPpipelineModel=PipelineModel.load(r".\projects\feedback-data-analyzer\SentimentAnalysis\Models\NLPPipeline")
 SparkPipelineModel = PipelineModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\SparkPipeline")
 
 # Testdaten
@@ -37,6 +36,7 @@ df.show()
 df2=NLPpipelineModel.transform(df)
 df3=SparkPipelineModel.transform(df2)
 
-df3.show()
-
+df3.select("value","label","prediction").show()
+accuracy = df3.filter(df3.label == df3.prediction).count() / float(df3.count())
+print("\n","Die Genauigkeit der Zuordnung beträgt: ",accuracy,"\n")
 spark.stop()

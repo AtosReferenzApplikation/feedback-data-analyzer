@@ -1,1 +1,0 @@
-{"class":"com.johnsnowlabs.nlp.Finisher","timestamp":1553167263797,"sparkVersion":"2.3.2","uid":"Finisher_44a8b3f28db0cbdf48c8","paramMap":{"outputAsArray":true,"inputCols":["lemma"],"includeMetadata":false,"valueSplitSymbol":"#","annotationSplitSymbol":"@","cleanAnnotations":true}}

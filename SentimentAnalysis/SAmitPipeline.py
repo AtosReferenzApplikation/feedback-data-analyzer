@@ -61,7 +61,7 @@ finisher = Finisher() \
 	.setIncludeMetadata(False)\
 	.setOutputAsArray(True)
 
-NLPpipeline=Pipeline().setStages([documentAssembler, tokenizer, normalizer, lemmatizer, finisher])
+NLPpipeline=Pipeline(stages=[documentAssembler, tokenizer, normalizer, lemmatizer, finisher])
 NLPpipelineModel=NLPpipeline.fit(data)
 
 data2=NLPpipelineModel.transform(data)
@@ -92,10 +92,7 @@ SparkPipelineModel=SparkPipeline.fit(data2)
 data7=SparkPipelineModel.transform(data2)
 data7.show()
 
-SparkPipelineModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\SparkPipeline")
 NLPpipelineModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\NLPPipeline")
-model.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\CV")
-idfModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\IDF")
-lrmodel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\LogisticRegression")
+SparkPipelineModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\SentimentAnalysis\Models\SparkPipeline")
 
 spark.stop()

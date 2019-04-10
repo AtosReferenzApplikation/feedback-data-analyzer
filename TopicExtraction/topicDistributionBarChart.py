@@ -1,4 +1,4 @@
-# Dies ist Code für ein Bar chart für 5 Documente für 5 Topics 
+# Dies ist Code für ein Bar chart für 5 Dokumente für 5 Topics 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
