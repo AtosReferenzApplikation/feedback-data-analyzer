@@ -12,7 +12,6 @@ from pyspark.ml import Pipeline
 from pyspark.ml.feature import StopWordsRemover
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
-from pyspark.ml.clustering import LDA
 from pyspark.ml.classification import LogisticRegression
 
 # Txt Dateien einlesen

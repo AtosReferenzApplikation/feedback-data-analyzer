@@ -47,7 +47,7 @@ stemmer = Stemmer() \
 data6=stemmer.transform(data5)
 
 # Nochmal Normalizen, um leere Token zu entfernen:
-normalizer = Normalizer() \
+normalizer2 = Normalizer() \
 	.setInputCols(["stem"]) \
 	.setOutputCol("norm")
 norm=normalizer.fit(data6)
