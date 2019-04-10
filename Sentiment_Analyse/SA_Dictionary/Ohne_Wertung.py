@@ -20,7 +20,7 @@ posl = pos.take(pos.count())
 poslist = [posl[x][0] for x in range(len(posl))]
 
 # Datei als DataFrame einlesen:
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\test\pos\0_10.txt")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\neg\0_2.txt")
 
 regtok = regexTokenizer.transform(df)
 rem1 = remover1.transform(regtok)
