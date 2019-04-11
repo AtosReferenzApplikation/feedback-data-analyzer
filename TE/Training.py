@@ -67,14 +67,15 @@ TESparkPipeline=Pipeline(stages=[remover,remov,cv,idf,lda])
 TESparkPipelineModel=TESparkPipeline.fit(data2)
 data3=TESparkPipelineModel.transform(data2)
 TESparkPipelineModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\Models\TESparkPipeline")
-data3.write.save("TEdata3.parquet",format="parquet")
-
+#data3.write.save("TEdata3.parquet",format="parquet")
+data3.write.save("TEdata3.json",format="json")
 # Topics
 stages = TESparkPipelineModel.stages
 ldalist = [s for s in stages if isinstance(s, LDAModel)]
 lda=ldalist[0]
 topics=lda.describeTopics(5)
-topics.write.save("TEtopics.parquet",format="parquet")
+#topics.write.save("TEtopics.parquet",format="parquet")
+topics.write.save("TEtopics.json",format="json")
 
 ll = lda.logLikelihood(data3)
 lp = lda.logPerplexity(data3)

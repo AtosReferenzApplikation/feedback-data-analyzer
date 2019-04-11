@@ -1,0 +1,1 @@
+{"class":"com.johnsnowlabs.nlp.annotators.NormalizerModel","timestamp":1554970115012,"sparkVersion":"2.3.2","uid":"NORMALIZER_334cf683686c","paramMap":{"inputCols":["stem"],"outputCol":"norm","patterns":["[^\\pL+]"],"lowercase":true}}

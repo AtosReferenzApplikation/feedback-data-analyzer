@@ -19,8 +19,8 @@ import matplotlib.pyplot as plt
 #TENLPPipelineModel=PipelineModel.load(r".\projects\feedback-data-analyzer\TE\Models\TENLPPipeline"")
 TESparkPipelineModel = PipelineModel.load(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\Models\TESparkPipeline")
 # Data, Topics
-data=spark.read.load(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\TEdata3.parquet")
-topics=spark.read.load(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\TEtopics.parquet")
+data=spark.read.load(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\TEdata3.json",format="json")
+topics=spark.read.load(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\TEtopics.json",format="json")
 # Vocabulary
 stages = TESparkPipelineModel.stages
 vectorizers = [s for s in stages if isinstance(s, CountVectorizerModel)]
@@ -31,7 +31,7 @@ indices=topics.select("termIndices").take(topics.count())
 topiclist=[[vocablist[i] for i in indices[x][0]] for x in range(len(indices))]
 
 # WordCloud für Topic x
-x=78
+x=75
 term=topics.select("termIndices").take(topics.count())
 weight=topics.select("termWeights").take(topics.count())
 topics=[vocablist[a] for a in term[x][0]]
