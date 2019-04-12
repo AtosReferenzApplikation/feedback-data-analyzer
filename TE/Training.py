@@ -67,7 +67,7 @@ TESparkPipeline=Pipeline(stages=[remover,remov,cv,idf,lda])
 TESparkPipelineModel=TESparkPipeline.fit(data2)
 data3=TESparkPipelineModel.transform(data2)
 TESparkPipelineModel.write().overwrite().save(r"C:\Users\A704081\projects\feedback-data-analyzer\TE\Models\TESparkPipeline")
-#data3.write.save("TEdata3.parquet",format="parquet")
+data3.write.save("TEdata3.parquet",format="parquet")
 data3.write.save("TEdata3.json",format="json")
 # Topics
 stages = TESparkPipelineModel.stages
