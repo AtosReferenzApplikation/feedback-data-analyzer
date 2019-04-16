@@ -31,7 +31,7 @@ indices=topics.select("termIndices").take(topics.count())
 topiclist=[[vocablist[i] for i in indices[x][0]] for x in range(len(indices))]
 
 # WordCloud für Topic x
-x=75
+x=5
 term=topics.select("termIndices").take(topics.count())
 weight=topics.select("termWeights").take(topics.count())
 topics=[vocablist[a] for a in term[x][0]]

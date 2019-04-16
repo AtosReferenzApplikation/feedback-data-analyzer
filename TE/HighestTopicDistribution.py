@@ -34,7 +34,7 @@ distribution=data.select("topicDistribution").take(data.count())
 
 # distridict = Zahl:Distribution-Wert nach Zahl/Key von 0 an
 # Distribution für Dokument x
-x=78
+x=5
 distridict={a:distribution[x][0][a] for a in range(len(distribution[x][0]))}
 
 # gibt key:value pairs in nach größe geordneter Reihenfolge an, lässt sich aber nicht durch iterieren: 

@@ -1,0 +1,1 @@
+{"class":"com.johnsnowlabs.nlp.annotators.Stemmer","timestamp":1555398569152,"sparkVersion":"2.3.2","uid":"Stemmer_46f69595c88aad50287b","paramMap":{"inputCols":["lemma"],"language":"english","outputCol":"stem"}}

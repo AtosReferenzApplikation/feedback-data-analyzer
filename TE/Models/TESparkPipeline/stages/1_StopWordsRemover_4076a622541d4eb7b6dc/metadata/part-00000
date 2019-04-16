@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StopWordsRemover","timestamp":1555400209124,"sparkVersion":"2.3.2","uid":"StopWordsRemover_4076a622541d4eb7b6dc","paramMap":{"inputCol":"filtered","caseSensitive":false,"stopWords":["br","movi","film","thi","hi","thei","episod","seri","much","sai"],"outputCol":"filtered2"}}

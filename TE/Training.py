@@ -61,7 +61,7 @@ stoplist=["br", "movi", "film", "thi", "hi", "thei", "episod", "seri", "much", "
 remov=StopWordsRemover(inputCol="filtered", outputCol="filtered2", stopWords=stoplist)
 cv = CountVectorizer(inputCol="filtered2", outputCol="features", minDF=10)
 idf = IDF(inputCol="features", outputCol="IDFFeatures")
-lda = LDA(k=80, maxIter=10)
+lda = LDA(featuresCol="IDFFeatures",k=80, maxIter=10)
 
 TESparkPipeline=Pipeline(stages=[remover,remov,cv,idf,lda])
 TESparkPipelineModel=TESparkPipeline.fit(data2)

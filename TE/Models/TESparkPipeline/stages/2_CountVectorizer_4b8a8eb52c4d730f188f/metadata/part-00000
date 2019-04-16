@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.CountVectorizerModel","timestamp":1555400209467,"sparkVersion":"2.3.2","uid":"CountVectorizer_4b8a8eb52c4d730f188f","paramMap":{"minDF":10.0,"minTF":1.0,"vocabSize":262144,"inputCol":"filtered2","binary":false,"outputCol":"features"}}
