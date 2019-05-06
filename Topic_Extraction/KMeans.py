@@ -10,6 +10,8 @@ from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import IDF
 from pyspark.ml.clustering import KMeans
 
+from pyspark.sql import Row
+
 df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\train\neg")
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 regtok = regexTokenizer.transform(df)
@@ -22,6 +24,7 @@ lemmatizer = WordNetLemmatizer()
 words = []
 stemmer = SnowballStemmer("english")
 all = []
+rowsneu = []
 
 for k in filrow:
 	for m in k:
@@ -33,7 +36,10 @@ for k in filrow:
 		all.append(words)
 		words = []
 
-fertig = spark.createDataFrame(all, ["value"])
+for x in all:
+    rowsneu.append(Row(value=x))
+
+fertig = spark.createDataFrame(rowsneu)
 
 remover2 = StopWordsRemover(inputCol="value", outputCol="rem")
 rem2 = remover2.transform(fertig)
@@ -64,7 +70,7 @@ centers = model.clusterCenters()
 
 #Wie ähnlich Objekt dem eigentlichen Cluster ist, verglichen mit anderen
 #Gemessen an euklidischer oder Manhatten-Distanz (metrische)
-#Range: −1 to +1 (high = well matched, low = poorly matched) -> Many points low/negative value, too many or too few clusters
+#Range: −1 to +1 (high = well matched, low = poorly matched)
 evaluator = ClusteringEvaluator()
 silhouette = evaluator.evaluate(predictions)
 
