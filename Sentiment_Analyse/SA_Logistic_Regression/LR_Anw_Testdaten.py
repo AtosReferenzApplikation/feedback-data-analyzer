@@ -1,4 +1,4 @@
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\neg")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\pos")
 
 regtok = regexTokenizer.transform(df)
 filrow = remover1.transform(regtok).select("filtered").take(regtok.count())
@@ -7,8 +7,7 @@ for k in filrow:
     for n in k[0]:	
         n = lemmatizer.lemmatize(n, "v")
         n = lemmatizer.lemmatize(n)
-        if n not in additionalstopwords:
-            words.append(n)
+        words.append(n)
     final.append(words)
     words = []
 
@@ -18,7 +17,8 @@ for x in final:
 
 fertig = spark.createDataFrame(hilf)
 
-#Vektor aus Dokumenten, tfidf-df erstellen
+##ngdf = ngram.transform(fertig)
+#vec = cvmodel.transform(ngdf)
 vec = cvmodel.transform(fertig)
 idf = idfmodel.transform(vec)
 end = lrmodel.transform(idf)
@@ -35,3 +35,4 @@ print("Auswertung = Positiv sind etwa", round(Countereins/12500 * 100), "Prozent
 
 ##Bei positiven Testdaten: 83% positiv, 17% negativ
 ##Bei negativen Testdaten: 81% negativ, 19% positiv
+##Mit n grams pos: 1% schlechter, neg: gleiche Ergebnisse

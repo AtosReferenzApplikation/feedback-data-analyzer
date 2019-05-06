@@ -7,17 +7,20 @@ from pyspark.ml.feature import CountVectorizer, CountVectorizerModel
 from pyspark.ml.feature import IDF, IDFModel
 from pyspark.ml.classification import LogisticRegression, LogisticRegressionModel
 
-additionalstopwords = ["doesn", "didn", "isn", "wasn", "get", "realli", "re", "shouldn", "tho", "everi", "br"]
+from pyspark.ml.feature import NGram
 
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 remover1 = StopWordsRemover(inputCol="words", outputCol="filtered")
-remover2 = StopWordsRemover(inputCol="filtered", outputCol="rem")
-remover3 = StopWordsRemover(inputCol="rem", outputCol="filtered", stopWords = additionalstopwords)
+remover2 = StopWordsRemover(inputCol="value", outputCol="filtered")
 
 lemmatizer = WordNetLemmatizer()
 words = []
 all = []
 hilf = []
+lab = []
+
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
+##cv = CountVectorizer(inputCol="ngrams", outputCol="tf")
 
 cv = CountVectorizer(inputCol="filtered", outputCol="tf")
 idf = IDF(inputCol="tf", outputCol="features")

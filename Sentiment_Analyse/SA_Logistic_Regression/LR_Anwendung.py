@@ -13,6 +13,9 @@ for k in filrow:
 dfneu = spark.createDataFrame([(all,)], ["value"])
 fertig = remover2.transform(dfneu).select("filtered")
 
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
+##ngdf = ngram.transform(fertig)
+
 #Vektor aus Dokumenten, tfidf-df erstellen
 tf = cvmodel.transform(fertig)
 tfidf = idfmodel.transform(tf)

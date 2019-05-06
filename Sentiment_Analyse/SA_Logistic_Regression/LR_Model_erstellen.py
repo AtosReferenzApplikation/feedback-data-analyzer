@@ -36,15 +36,16 @@ for k in filrow:
     lab = []
     words = []
 
-fertig = spark.createDataFrame(all, ["filtered", "label"])
+fertig = spark.createDataFrame(all, ["value", "label"])
 
 # Stopwords entfernen:
-rem2 = remover2.transform(fertig).select("rem", "label")
-fertig = remover3.transform(rem2).select("filtered", "label")
+fertig = remover2.transform(fertig).select("filtered", "label")
+
+##ngdf = ngram.transform(fertig)
+##cvmodel = cv.fit(ngdf)
 
 cvmodel = cv.fit(fertig)
-dict = model.vocabulary
-tf = model.transform(fertig)
+tf = cvmodel.transform(fertig)
 idfmodel = idf.fit(tf)
 tfidflab = idfmodel.transform(tf).select("features", "label")
 

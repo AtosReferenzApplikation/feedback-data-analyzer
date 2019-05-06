@@ -6,6 +6,7 @@ from pyspark.ml.feature import CountVectorizer, CountVectorizerModel
 from pyspark.ml.feature import IDF, IDFModel
 from pyspark.ml.classification import LogisticRegression, LogisticRegressionModel
 
+from pyspark.ml.feature import NGram
 from pyspark.sql import Row
 
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
@@ -23,6 +24,8 @@ lr = LogisticRegression()
 idfmodel = IDFModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\idf")
 cvmodel = CountVectorizerModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\cv")
 lrmodel = LogisticRegressionModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\lr")
+
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
 
 Counternull = 0
 Countereins = 0

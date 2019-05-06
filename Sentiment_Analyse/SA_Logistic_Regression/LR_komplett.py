@@ -9,17 +9,20 @@ from pyspark.ml.feature import CountVectorizer, CountVectorizerModel
 from pyspark.ml.feature import IDF, IDFModel
 from pyspark.ml.classification import LogisticRegression, LogisticRegressionModel
 
-additionalstopwords = ["doesn", "didn", "isn", "wasn", "get", "realli", "re", "shouldn", "tho", "everi", "br"]
+from pyspark.ml.feature import NGram
 
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
 remover1 = StopWordsRemover(inputCol="words", outputCol="filtered")
-remover2 = StopWordsRemover(inputCol="filtered", outputCol="rem")
-remover3 = StopWordsRemover(inputCol="rem", outputCol="filtered", stopWords = additionalstopwords)
+remover2 = StopWordsRemover(inputCol="value", outputCol="filtered")
 
 lemmatizer = WordNetLemmatizer()
 words = []
 all = []
 hilf = []
+lab = []
+
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
+##cv = CountVectorizer(inputCol="ngrams", outputCol="tf")
 
 cv = CountVectorizer(inputCol="filtered", outputCol="tf")
 idf = IDF(inputCol="tf", outputCol="features")
@@ -66,14 +69,15 @@ for k in filrow:
     lab = []
     words = []
 
-fertig = spark.createDataFrame(all, ["filtered", "label"])
+fertig = spark.createDataFrame(all, ["value", "label"])
 
 # Stopwords entfernen:
-rem2 = remover2.transform(fertig).select("rem", "label")
-fertig = remover3.transform(rem2).select("filtered", "label")
+fertig = remover2.transform(fertig).select("filtered", "label")
+
+##ngdf = ngram.transform(fertig)
+##cvmodel = cv.fit(ngdf)
 
 cvmodel = cv.fit(fertig)
-dict = cvmodel.vocabulary
 tf = cvmodel.transform(fertig)
 idfmodel = idf.fit(tf)
 tfidflab = idfmodel.transform(tf).select("features", "label")
@@ -85,6 +89,7 @@ cvmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\cv"
 idfmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\idf")
 lrmodel.write().overwrite().save(r"C:\Users\A704194\projects\Spark_PP1\model\lr")
 
+
 ####################################### Def Anwendung
 
 from pyspark.ml.feature import RegexTokenizer
@@ -95,6 +100,7 @@ from pyspark.ml.feature import CountVectorizer, CountVectorizerModel
 from pyspark.ml.feature import IDF, IDFModel
 from pyspark.ml.classification import LogisticRegression, LogisticRegressionModel
 
+from pyspark.ml.feature import NGram
 from pyspark.sql import Row
 
 regexTokenizer = RegexTokenizer(inputCol="value", outputCol="words", pattern="\\W")
@@ -113,13 +119,15 @@ idfmodel = IDFModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\idf")
 cvmodel = CountVectorizerModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\cv")
 lrmodel = LogisticRegressionModel.load(r"C:\Users\A704194\projects\Spark_PP1\model\lr")
 
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
+
 Counternull = 0
 Countereins = 0
 ergebnis = 5
 
 ####################################### Anwendung
 
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\pos\0_10.txt")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Englisch\pos\24_10.txt")
 
 regtok = regexTokenizer.transform(df)
 filrow = remover1.transform(regtok).select("filtered").take(regtok.count())
@@ -133,6 +141,9 @@ for k in filrow:
 
 dfneu = spark.createDataFrame([(all,)], ["value"])
 fertig = remover2.transform(dfneu).select("filtered")
+
+##ngram = NGram(n=2, inputCol="filtered", outputCol="ngrams")
+##ngdf = ngram.transform(fertig)
 
 #Vektor aus Dokumenten, tfidf-df erstellen
 tf = cvmodel.transform(fertig)
