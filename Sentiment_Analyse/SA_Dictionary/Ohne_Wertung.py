@@ -1,3 +1,5 @@
+##Achtung: Schlechte Ergbnisse, da deutsche Daten mit englischem Lemmatizer
+
 from pyspark.ml.feature import RegexTokenizer
 from pyspark.ml.feature import StopWordsRemover
 from nltk.stem import WordNetLemmatizer

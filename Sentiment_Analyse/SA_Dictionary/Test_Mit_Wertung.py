@@ -1,3 +1,5 @@
+##Achtung: Schlechte Ergbnisse, da deutsche Daten mit englischem Lemmatizer
+
 import re
 from pyspark.ml.feature import RegexTokenizer
 from pyspark.ml.feature import StopWordsRemover
@@ -21,41 +23,33 @@ final = []
 rowsneu = []
 
 ############################# Deutsche Sentiment Listen:
-ngstmt = spark.read.load(r"C:\Users\A704081\Downloads\Projekt\SentiWS_v1.8c_Negative.txt",format="csv",sep="\t")
-negc0 = ngstmt.select("_c0").take(ngstmt.count())
-negwordlist = [re.split("[|]", negc0[x][0]) for x in range(len(negc0))]
-negsentiment2 = spark.createDataFrame(negwordlist)
+ngstmt = spark.read.load(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\SentiWS_v1.8c_Negative.txt",format="csv",sep="\t")
+ngstmtrows = ngstmt.select("_c0").take(ngstmt.count())
+negwordlist = [re.split("[|]", ngstmtrows[x][0]) for x in range(len(ngstmtrows))]
 negscore = ngstmt.select("_c1").take(ngstmt.count())
+NegScoreDict = {negwordlist[x][0]:float(negscore[x][0]) for x in range(len(negscore))}
 
-NegScoreDict = {negwordlist[x][0]:float(negscore[x][0]) for x in range(negscore.count())}
+negzusatz = ngstmt.select("_c2").take(ngstmt.count())
+negzusatzSplit = [re.split("," ,negzusatz[x][0]) if negzusatz[x][0]!=None else "Leer" for x in range(len(negzusatz))]
+negWortDict = {wort:float(negscore[x][0]) for x in range(len(negscore)) for wort in negzusatzSplit[x]}
 
-############################# zusatzSplit und zusatzList sind die selbe Liste, ich lösche aber keine, um Folgefehler zu vermeiden
+negdict = {**NegScoreDict, **negWortDict}
+############################# positive Liste
 
-zusatz = ngstmt.select("_c2").take(ngstmt.count())
-zusatzSplit = [re.split("," ,zusatz[x][0]) if zusatz[x][0]!=None else "Leer" for x in range(len(zusatz))]
-zusatzList = [[i for i in zusatzSplit[x]] if zusatzSplit[x]!= "Leer" else "Leer" for x in range(len(zusatz))]
-negWortDict = {wort:float(negscore[x][0]) for x in range(negscore.count()) for wort in zusatzList[x]}
-
-#############################
-
-psstmt = spark.read.load(r"C:\Users\A704081\Downloads\Projekt\SentiWS_v1.8c_Positive.txt",format="csv",sep="\t")
-posc0 = ngstmt.select("_c0").take(ngstmt.count())
-poswordlist = [re.split("[|]", posc0[x][0]) for x in range(len(posc0))]
-possentiment2 = spark.createDataFrame(poswordlist)
+psstmt = spark.read.load(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\SentiWS_v1.8c_Positive.txt",format="csv",sep="\t")
+psstmtrows = psstmt.select("_c0").take(psstmt.count())
+poswordlist = [re.split("[|]", psstmtrows[x][0]) for x in range(len(psstmtrows))]
 posscore = psstmt.select("_c1").take(psstmt.count())
-
 PosScoreDict = {poswordlist[x][0]:float(posscore[x][0]) for x in range(psstmt.count())}
 
-############################# poszusatzSplit und poszusatzList sind die selbe Liste, ich lösche aber keine, um Folgefehler zu vermeiden
 poszusatz = psstmt.select("_c2").take(psstmt.count())
-poszusatzSplit = [re.split("," ,poszusatz[x][0]) if poszusatz[x][0]!=None else "Leer" for x in range(len(poszusatz))]
-poszusatzList = [[i for i in poszusatzSplit[x]] if poszusatzSplit[x]!= "Leer" else "Leer" for x in range(len(poszusatz))]
-posWortDict = {wort:float(posscore[x][0]) for x in range(psstmt.count()) for wort in poszusatzList[x]}
+poszusatzSplit = [re.split(",", poszusatz[x][0]) if poszusatz[x][0] != None else "Leer" for x in range(len(poszusatz))]
+posWortDict = {wort:float(posscore[x][0]) for x in range(psstmt.count()) for wort in poszusatzSplit[x]}
 
+posdict = {**posWortDict, **PosScoreDict}
 ############################# 
 #Daten Einlesen:
-#tweets=spark.read.load(r"C:\Users\A704081\Downloads\Projekt\corpus_v1.0.tsv",format="csv",sep="\t")
-df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\TR\Projekt\test\pos")
+df = spark.read.text(r"C:\Users\A704194\projects\feedback-data-analyzer\Daten\TE_Deutsch\Testtweets.txt")
 
 regtok = regexTokenizer.transform(df)
 rem1 = remover1.transform(regtok)
@@ -81,46 +75,23 @@ for x in take:
     words = [y for y in x[0]]
     final.append(words)
     words = []
+
 ######
-CounterList = [[0] for x in range(fertig.count())]
+CounterList = [0]
 
 for x in range(fertig.count()):
     for y in all[x]:
-        if y in PosScoreDict:
-            CounterList[x] += PosScoreDict[x]
-        if y in NegScoreDict:
-            CounterList[x] += NegScoreDict[x]
-        if y in posWortDict:
-            CounterList[x] += posWortDict[x]
-        if y in negWortDict:
-            CounterList[x] += negWortDict[x]
+        if y in posdict:
+            CounterList[0] += posdict[y]
+        elif y in negdict:
+            CounterList[0] += negdict[y]
 
 
-CounterList2 = [[0,0] for x in range(fertig.count())]
+CounterList2 = [0,0]
 
 for x in range(fertig.count()):
     for y in all[x]:
-        if y in PosScoreDict:
-            CounterList2[x][0] += PosScoreDict[x]
-        if y in NegScoreDict:
-            CounterList2[x][1] += NegScoreDict[x]
-        if y in posWortDict:
-            CounterList2[x][0] += posWortDict[x]
-        if y in negWortDict:
-            CounterList2[x][1] += negWortDict[x]
-
-posWortDict = {}
-negWortDict = {}
-NegScoreDict = {}
-PosScoreDict = {}
-listepwd = [[0.1,"go"], [0.2, "see"],[0.4,"know"],[0.9,"ashton"],[0.9,"kutcher"],[0.9,"comedy"],[0.9,"friend"],[0.1,"mine"],[0.2,"play"],[0.3,"theater"],[0.4,"emotions"]]
-listenwd = [[-0.85, "judge"], [-0.9, "wrong"], [-0.6, "night"], [-0.4, "coax"], [-0.2, "admit"], [-0.3, "reluctant"], [-0.1, "only"]]
-
-for x in listepwd:
-    posWortDict[x[1]] = x[0]
-
-for x in listenwd:
-    negWortDict[x[1]] = x[0]
-
-PosScoreDict = posWortDict
-NegScoreDict = negWortDict
+        if y in posdict:
+            CounterList2[0] += posdict[y]
+        elif y in negdict:
+            CounterList2[1] += negdict[y]
